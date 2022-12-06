@@ -40,8 +40,8 @@ class Board:
         self.selected = self.board[row][col]
 
     def move(self,piece, col, row, switch=True):
-        piece.rect.center = (col*SQ_SIZE +SQ_SIZE//2, row*SQ_SIZE +SQ_SIZE//2)
-        self.board[piece.row][piece.col] = 0
+        
+        # castling
         if piece.name == "K":
             # short castle
             if col - piece.col == 2:
@@ -53,12 +53,27 @@ class Board:
                 switch = False
                 self.move(self.board[row][col-2], col+1, row, switch)
                 switch = True
+
+        # pawn promotion
+        if piece.name == "P":
+            if row == 7 or row == 0:
+                piece = Piece("Q", piece.colour, piece.col, piece.row)
+
+        # move the image of the piece
+        piece.rect.center = (col*SQ_SIZE +SQ_SIZE//2, row*SQ_SIZE +SQ_SIZE//2)
+        # clears the pieces old boad space
+        self.board[piece.row][piece.col] = 0
+        # puts the piece in the new board space
         self.board[row][col] = piece
+        # updates the pieces row and column attributes
         self.board[row][col].row, self.board[row][col].col = row, col
+        # update the piece to show that it has moved
         self.board[row][col].moved = True
+
+        # switch turn
         if switch:
             self.switch_turn()
-
+    
     def switch_turn(self):
         if self.turn == "w":
             self.turn = "b"
