@@ -462,10 +462,12 @@ class Board:
                     if self.board[row][col-1] == 0 and self.board[row][col-2] == 0 and self.board[row][col-3] == 0:
                         for r in self.board:
                             for each in r:
-                                if each != 0 and each != None:
+                                if each != 0 and each != None and each.colour != piece.colour:
                                     if (col, row) in each.legal_moves or (col-1, row) in each.legal_moves or (col-2, row) in each.legal_moves or (col-3, row) in each.legal_moves or (col-4, row) in each.legal_moves:
                                         no_castle = True
                                         break
+                            if no_castle:
+                                break
                         if not no_castle:
                             piece.legal_moves.append((col-2, row))
         return piece
