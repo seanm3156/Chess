@@ -16,7 +16,7 @@ class Board:
                 ]
         self.selected = 0
         self.turn = "w"
-        
+        self.winner = "N"
 
     def draw_board(self, screen):
         for row in range(ROWS):
@@ -32,9 +32,6 @@ class Board:
 
     def select(self, col, row):
         if self.selected != 0 and self.selected != None and (col, row) in self.selected.legal_moves and self.selected.colour == self.turn:
-            # move the piece image
-            # set its origional position to empty
-            # move the piece
             self.move(self.selected, col, row)
 
         self.selected = self.board[row][col]
@@ -81,10 +78,23 @@ class Board:
             self.turn = "w"
 
     def get_all_valid_moves(self):
+        white_king = False
+        black_king = False
         for row in self.board:
             for each in row:
                 if each != 0 and each != None:
                     each = self.get_legal_moves(each)
+                    if each.name == "K":
+                        if each.colour == "w":
+                            white_king = True
+                        else:
+                            black_king = True
+
+        if white_king == False:
+            self.winner = "Black"
+        elif black_king == False:
+            self.winner = "White"
+
     
     def get_legal_moves(self, piece):
         col = piece.col
@@ -93,9 +103,6 @@ class Board:
         name = piece.name
         mult = 1
         piece.legal_moves = []
-        # if colour != self.turn:
-        #     return
-        #
 
         # pawn
         if name == "P":
