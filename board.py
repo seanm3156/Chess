@@ -114,8 +114,9 @@ class Board:
             if row + direction != 8 and row + direction != -1:
                 if self.board[row + direction][col] == 0:
                     piece.legal_moves.append((col, row + direction))
-                    if self.board[row + 2*direction][col] == 0 and piece.moved == False:
-                        piece.legal_moves.append((col, row + 2*direction))
+                    if row + 2*direction != 8 and row +2*direction != 8:
+                        if self.board[row + 2*direction][col] == 0 and piece.moved == False:
+                            piece.legal_moves.append((col, row + 2*direction))
                 if col + 1 != 8:
                     if self.board[row + direction][col + 1] != 0 and self.board[row + direction][col + 1].colour != colour:
                         piece.legal_moves.append((col+1, row+direction))
